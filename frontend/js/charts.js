@@ -1,5 +1,5 @@
 // Point to your live backend
-const API_BASE_URL = "https://us-economy-dashboard-98go.onrender.com/";
+const API_BASE_URL = "https://us-economy-dashboard-98go.onrender.com";
 
 // Tailwind Theme Colors extracted from your HTML for Chart.js
 const theme = {
