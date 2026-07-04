@@ -1,1 +1,211 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>US Fiscal Intelligence Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-container-high": "#2a2a2a",
+                    "on-primary-container": "#00285d",
+                    "on-secondary-fixed": "#410004",
+                    "on-secondary-container": "#ffaea8",
+                    "tertiary-container": "#00a74b",
+                    "on-primary-fixed-variant": "#004395",
+                    "on-primary": "#002e6a",
+                    "error": "#ffb4ab",
+                    "inverse-primary": "#005ac2",
+                    "tertiary-fixed": "#6bff8f",
+                    "secondary-fixed": "#ffdad7",
+                    "tertiary-fixed-dim": "#4ae176",
+                    "primary-container": "#4d8eff",
+                    "on-tertiary-fixed-variant": "#005321",
+                    "error-container": "#93000a",
+                    "outline": "#8c909f",
+                    "surface": "#131313",
+                    "surface-container": "#201f1f",
+                    "on-primary-fixed": "#001a42",
+                    "on-error": "#690005",
+                    "surface-bright": "#3a3939",
+                    "surface-container-highest": "#353534",
+                    "secondary-container": "#a40217",
+                    "on-secondary": "#68000a",
+                    "secondary": "#ffb3ad",
+                    "secondary-fixed-dim": "#ffb3ad",
+                    "on-tertiary": "#003915",
+                    "surface-container-lowest": "#0e0e0e",
+                    "surface-container-low": "#1c1b1b",
+                    "on-surface": "#e5e2e1",
+                    "on-surface-variant": "#c2c6d6",
+                    "inverse-on-surface": "#313030",
+                    "on-tertiary-fixed": "#002109",
+                    "surface-dim": "#131313",
+                    "tertiary": "#4ae176",
+                    "primary-fixed-dim": "#adc6ff",
+                    "surface-variant": "#353534",
+                    "on-error-container": "#ffdad6",
+                    "primary": "#adc6ff",
+                    "on-background": "#e5e2e1",
+                    "background": "#131313",
+                    "inverse-surface": "#e5e2e1",
+                    "on-tertiary-container": "#003111",
+                    "surface-tint": "#adc6ff",
+                    "outline-variant": "#424754",
+                    "on-secondary-fixed-variant": "#930013",
+                    "primary-fixed": "#d8e2ff"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "unit": "4px",
+                    "container-max": "1440px",
+                    "gutter": "16px",
+                    "margin-mobile": "16px",
+                    "margin-desktop": "32px"
+            },
+            "fontFamily": {
+                    "sans": ["Inter", "sans-serif"],
+                    "mono": ["JetBrains Mono", "monospace"]
+            }
+          }
+        }
+      }
+    </script>
+<style type="text/tailwindcss">
+        @layer utilities {
+            .glass-panel {
+                @apply bg-surface-container/60 backdrop-blur-xl border border-white/10 shadow-xl;
+            }
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-sans p-6 min-h-screen selection:bg-primary selection:text-on-primary bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-surface-container-high/30 to-background">
+<header class="text-center mb-10 border-b border-white/10 pb-6">
+<h1 class="text-4xl font-bold text-on-surface mb-2 tracking-tight"><span class="text-primary">US Fiscal</span> Intelligence Terminal</h1>
+<p class="text-on-surface-variant text-sm tracking-wide">REAL-TIME MACROECONOMIC TRACKING AND PREDICTIVE ANALYTICS</p>
+</header>
+<main class="max-w-container-max mx-auto grid grid-cols-1 lg:grid-cols-3 gap-6">
+<section class="lg:col-span-3 glass-panel rounded-xl p-8 text-center relative overflow-hidden">
+<div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-error/0 via-error to-error/0"></div>
+<h2 class="text-sm font-semibold text-error uppercase tracking-widest mb-6 flex items-center justify-center gap-2">
+<span class="w-2 h-2 rounded-full bg-error animate-pulse"></span>
+                Live National Debt
+            </h2>
+<div class="text-5xl md:text-7xl font-mono text-error font-bold mb-4 tracking-tighter shadow-sm" id="debt-clock">Loading...</div>
+<p class="text-on-surface-variant font-mono text-sm">Increasing by <span class="text-error font-bold bg-error/10 px-2 py-0.5 rounded" id="velocity-rate">...</span> / sec</p>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-10">
+<div class="bg-surface-container-high/50 p-6 rounded-lg border border-white/5 backdrop-blur-sm">
+<h3 class="text-xs text-on-surface-variant mb-2 uppercase tracking-wider font-semibold">Debt Per Citizen</h3>
+<div class="text-2xl font-mono font-bold text-on-surface" id="metric-citizen">...</div>
+</div>
+<div class="bg-surface-container-high/50 p-6 rounded-lg border border-white/5 backdrop-blur-sm">
+<h3 class="text-xs text-on-surface-variant mb-2 uppercase tracking-wider font-semibold">Debt to GDP Ratio</h3>
+<div class="text-2xl font-mono font-bold text-on-surface" id="metric-gdp">...</div>
+</div>
+<div class="bg-surface-container-high/50 p-6 rounded-lg border border-white/5 backdrop-blur-sm">
+<h3 class="text-xs text-on-surface-variant mb-2 uppercase tracking-wider font-semibold">Average Interest Rate</h3>
+<div class="text-2xl font-mono font-bold text-on-surface" id="metric-interest">...</div>
+</div>
+</div>
+</section>
+<!-- New Fiscal Velocity Chart -->
+<section class="lg:col-span-1 glass-panel rounded-xl p-6 relative overflow-hidden">
+<div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-error/0 via-error to-error/0"></div>
+<h2 class="text-sm font-semibold text-error uppercase tracking-widest mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">speed</span>
+                Fiscal Velocity
+            </h2>
+<div class="relative h-64 w-full flex items-center justify-center">
+<canvas id="velocityChart"></canvas>
+</div>
+</section>
+<section class="lg:col-span-1 glass-panel rounded-xl p-6 relative overflow-hidden">
+<div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary/0 via-primary to-primary/0"></div>
+<h2 class="text-sm font-semibold text-primary uppercase tracking-widest mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">bar_chart</span>
+                Annual Budget
+            </h2>
+<div class="relative h-64 w-full">
+<canvas id="budgetChart"></canvas>
+</div>
+</section>
+<!-- New Debt to GDP Trend Chart -->
+<section class="lg:col-span-1 glass-panel rounded-xl p-6 relative overflow-hidden">
+<div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-secondary/0 via-secondary to-secondary/0"></div>
+<h2 class="text-sm font-semibold text-secondary uppercase tracking-widest mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">show_chart</span>
+                Debt to GDP Trend
+            </h2>
+<div class="relative h-64 w-full">
+<canvas id="debtGdpTrendChart"></canvas>
+</div>
+</section>
+<!-- New Macro Context Section -->
+<section class="lg:col-span-1 glass-panel rounded-xl p-6 relative overflow-hidden">
+<div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-surface-tint/0 via-surface-tint to-surface-tint/0"></div>
+<h2 class="text-sm font-semibold text-surface-tint uppercase tracking-widest mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">query_stats</span>
+                Interest vs Inflation
+            </h2>
+<div class="relative h-64 w-full">
+<canvas id="macroContextChart"></canvas>
+</div>
+</section>
+<section class="lg:col-span-2 glass-panel rounded-xl p-6 relative overflow-hidden">
+<div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-tertiary/0 via-tertiary to-tertiary/0"></div>
+<div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
+<h2 class="text-sm font-semibold text-tertiary uppercase tracking-widest flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">trending_up</span>
+                    10-Year Projection
+                </h2>
+<select class="bg-surface-container-high text-on-surface border border-outline/30 rounded px-3 py-1.5 text-xs font-mono outline-none focus:border-tertiary focus:ring-1 focus:ring-tertiary transition-all" id="growth-scenario">
+<option value="1.03">Conservative (3%)</option>
+<option selected="" value="1.06">Standard (6%)</option>
+<option value="1.09">Aggressive (9%)</option>
+</select>
+</div>
+<div class="relative h-64 w-full">
+<canvas id="projectionChart"></canvas>
+</div>
+</section>
+</main>
+<div class="fixed bottom-6 right-6 w-96 glass-panel rounded-xl overflow-hidden flex flex-col z-50 transition-all duration-300 hover:shadow-2xl hover:shadow-primary/10" style="height: 450px;">
+<div class="bg-surface-container-high/80 px-4 py-4 border-b border-white/10 flex justify-between items-center backdrop-blur-md">
+<h3 class="font-bold text-on-surface flex items-center gap-2 text-sm tracking-wide">
+<span class="material-symbols-outlined text-primary text-[20px]">smart_toy</span>
+                Fiscal AI Assistant
+            </h3>
+<span class="flex h-2 w-2 relative">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
+</span>
+</div>
+<div class="flex-1 p-4 overflow-y-auto text-sm text-on-surface-variant space-y-4 font-sans bg-surface-container/30" id="chat-output">
+<div class="bg-surface-container-high text-on-surface p-3 rounded-lg rounded-tl-none self-start w-10/12 border border-white/5 shadow-sm">
+                System initialized. Ask me about the current budget, historical trends, or future macroeconomic projections.
+            </div>
+</div>
+<div class="p-3 bg-surface-container-high/80 border-t border-white/10 flex gap-2 backdrop-blur-md">
+<input class="flex-1 bg-surface-container-low text-on-surface border border-outline/30 rounded-lg px-4 py-2 text-sm outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all font-sans placeholder:text-on-surface-variant/50" id="chat-input" placeholder="Query data..." type="text"/>
+<button class="bg-primary hover:bg-primary-container text-on-primary hover:text-on-primary-container p-2 rounded-lg font-bold transition-colors flex items-center justify-center" id="chat-submit">
+<span class="material-symbols-outlined">send</span>
+</button>
+</div>
+</div>
+<script src="./js/live_ticker.js" type="module"></script>
+<script src="./js/charts.js" type="module"></script>
+<script src="./js/chat_ui.js" type="module"></script>
+</body></html>
 
