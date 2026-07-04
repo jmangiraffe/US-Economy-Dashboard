@@ -1,5 +1,5 @@
 // Point to your live backend (Ensure no trailing slash)
-const API_BASE_URL = "https://us-economy-dashboard-98go.onrender.com/";
+const API_BASE_URL = "https://us-economy-dashboard-98go.onrender.com";
 
 async function initLiveTicker() {
     // 1. Grab all the target elements from the HTML
