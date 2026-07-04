@@ -1,5 +1,5 @@
 // Point to your live backend
-const API_BASE_URL = "https://us-economy-dashboard-98go.onrender.com/"; 
+const API_BASE_URL = "https://us-economy-dashboard-98go.onrender.com"; 
 
 const chatOutput = document.getElementById('chat-output');
 const chatInput = document.getElementById('chat-input');
